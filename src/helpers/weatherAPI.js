@@ -5,15 +5,20 @@ export const searchCities = async (term) => {
   const response = await fetchSearchByTerm(term);
   const data = await response.json();
   const { name } = data;
-  if (name !== term) window.alert('Nenhuma cidade encontrada');
+  if (name.length === 0) window.alert('Nenhuma cidade encontrada');
   return data;
 };
 
 const fetchWeatherByCityUrl = (cityURL) => `http://api.weatherapi.com/v1/current.json?lang=pt&key=${TOKEN}&q=${cityURL}`;
 
 export const getWeatherByCity = async (cityURL) => {
-  const response = await fetchWeatherByCityUrl(cityURL);
+  const response = fetchWeatherByCityUrl(cityURL);
   const data = await response.json();
-  const { current: { temp_c: temp, condition: { text, icon } } } = data;
-  return { temp, text, icon };
+  const {
+    current: {
+      temp_c: temp,
+      condition: { text, icon } },
+    location: { name, country },
+  } = data;
+  return { name, country, temp, text, icon };
 };
