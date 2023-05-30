@@ -14,6 +14,6 @@ const fetchWeatherByCityUrl = (cityURL) => `http://api.weatherapi.com/v1/current
 export const getWeatherByCity = async (cityURL) => {
   const response = await fetchWeatherByCityUrl(cityURL);
   const data = await response.json();
-  const { temp_c, condition.text, condition.icon } = data.current;
-  return {`temp: ${temp_c}, condition: ${condition.text}, icon: ${condition.icon}`};
+  const { current: { temp_c: temp, condition: { text, icon } } } = data;
+  return { temp, text, icon };
 };
