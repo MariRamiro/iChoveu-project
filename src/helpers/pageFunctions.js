@@ -80,13 +80,6 @@ export function createCityElement(cityInfo) {
 
   const cityElement = createElement('li', 'city');
 
-  const buttonElement = createElement('button', 'city-button', 'Ver previsão');
-  buttonElement.appendChild(cityElement);
-  buttonElement.addEventListner('click', async () => {
-    const callingForecastWeekdays = await getForecastWeekdays(url);
-    showForecast(callingForecastWeekdays);
-  });
-
   const headingElement = createElement('div', 'city-heading');
   const nameElement = createElement('h2', 'city-name', name);
   const countryElement = createElement('p', 'city-country', country);
@@ -110,6 +103,13 @@ export function createCityElement(cityInfo) {
   cityElement.appendChild(headingElement);
   cityElement.appendChild(infoContainer);
 
+  const buttonElement = createElement('button', 'city-button', 'Ver previsão');
+  cityElement.appendChild(buttonElement);
+  buttonElement.addEventListener('click', async () => {
+    const callingForecastWeekdays = await getForecastWeekdays(url);
+    showForecast(callingForecastWeekdays);
+  });
+
   return cityElement;
 }
 
@@ -122,10 +122,11 @@ export async function handleSearch(event) {
   const searchInput = document.getElementById('search-input');
   const searchValue = searchInput.value;
   const cities = await searchCities(searchValue);
-  const city = cities.map((town) => getWeatherByCity(town.url));
+  const city = cities.map(async (town) => [await getWeatherByCity(town.url), town.url]);
   const citiesObject = await Promise.all(city);
   citiesObject.forEach((element) => {
+    console.log(element);
     const ul = document.getElementById('cities');
-    ul.appendChild(createCityElement(element));
+    ul.appendChild(createCityElement({ ...element[0], url: element[1] }));
   });
 }

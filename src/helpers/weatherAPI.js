@@ -23,7 +23,7 @@ export const getForecastWeekdays = async (url) => {
   const { forecastDay } = data.forecast;
   const forecastList = forecastDay.map((info) => {
     const { information } = info;
-    const { maxtemp_c: maxTemp, minitempo_c: minTemp } = info.day;
+    const { maxtemp_c: maxTemp, minitemp_c: minTemp } = info.day;
     const { text: condition, icon } = info.day.condition;
     return { information, maxTemp, minTemp, condition, icon };
   });
