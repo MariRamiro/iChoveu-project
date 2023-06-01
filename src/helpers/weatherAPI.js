@@ -20,12 +20,12 @@ export const getForecastWeekdays = async (url) => {
   const week = 7;
   const response = await fetch(`http://api.weatherapi.com/v1/forecast.json?lang=pt&key=${TOKEN}&q=${url}&days=${week}`);
   const data = await response.json();
-  const { forecastDay } = data.forecast;
-  const forecastList = forecastDay.map((info) => {
-    const { information } = info;
-    const { maxtemp_c: maxTemp, minitemp_c: minTemp } = info.day;
+  const { forecastday } = data.forecast;
+  const forecastList = forecastday.map((info) => {
+    const { date } = info;
+    const { maxtemp_c: maxTemp, mintemp_c: minTemp } = info.day;
     const { text: condition, icon } = info.day.condition;
-    return { information, maxTemp, minTemp, condition, icon };
+    return { date, maxTemp, minTemp, condition, icon };
   });
   return forecastList;
 };
